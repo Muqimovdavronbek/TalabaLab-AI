@@ -91,3 +91,7 @@ Eslatma scheduleri yo‘q. Rejadagi sana avtomatik bildirishnoma yaratilganini a
 - https://developers.openai.com/api/docs/models/gpt-5-mini
 
 AI modeli yaratgan mazmun mustaqil hisoblash dalili deb ko‘rsatilmaydi. `computed` holati faqat deterministik solver natijasi uchun serverda hosil qilinadi; foydalanuvchi tahriri yangi `unverified` versiya yaratadi.
+
+## Litsenziya
+
+Loyihaning o‘z kodi [MIT litsenziyasi](LICENSE) asosida taqdim etiladi. Uchinchi tomon kutubxonalari, shriftlar va boshqa resurslarning mavjud litsenziya va mualliflik bildirishnomalari saqlanadi; ularning shartlari o‘z kuchida qoladi.
