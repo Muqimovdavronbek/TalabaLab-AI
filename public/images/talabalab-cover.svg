@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420">
+ <defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#f4f0fc"/><stop offset="1" stop-color="#f6faf8"/></linearGradient><filter id="shadow" x="-20%" y="-20%" width="150%" height="160%"><feDropShadow dx="0" dy="12" stdDeviation="15" flood-color="#6f55a7" flood-opacity=".08"/></filter></defs>
+ <rect width="1200" height="420" rx="24" fill="url(#bg)"/>
+ <circle cx="1010" cy="196" r="170" fill="none" stroke="#e5dfef"/><ellipse cx="960" cy="213" rx="220" ry="95" transform="rotate(-28 960 213)" fill="none" stroke="#e5dfef"/>
+ <rect x="56" y="54" width="46" height="46" rx="13" fill="#795bce"/>
+ <path d="M66 66h9a6 6 0 0 1 4 2 6 6 0 0 1 4-2h9v23h-9a6 6 0 0 0-4 2 6 6 0 0 0-4-2h-9Z M79 68v22" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round"/>
+ <text x="116" y="85" font-family="Arial,sans-serif" font-size="27" font-weight="700" fill="#302d40">TalabaLab <tspan fill="#795bce">AI</tspan></text>
+ <text x="58" y="166" font-family="Arial,sans-serif" font-size="12" letter-spacing="3" font-weight="700" fill="#9a84bd">SHAXSIY O‘QUV YORDAMCHINGIZ</text>
+ <text x="56" y="229" font-family="Arial,sans-serif" font-size="50" letter-spacing="-1.5" font-weight="700" fill="#302d40">Salom, Dava.</text>
+ <text x="57" y="278" font-family="Arial,sans-serif" font-size="25" fill="#795bce">Topshiriqdan tushunchagacha.</text>
+ <text x="58" y="326" font-family="Arial,sans-serif" font-size="14" fill="#8c899b">Fanlar · Aniq hisob · SQL · Tahrirlanadigan hujjatlar</text>
+ <g transform="translate(762 65) rotate(-7 85 110)" filter="url(#shadow)"><rect width="182" height="224" rx="19" fill="#fff" stroke="#e8e1f1"/><text x="21" y="34" font-family="Arial,sans-serif" font-size="9" letter-spacing="2" fill="#b4a9c3">ANIQ HISOB</text><g stroke="#b3a0d5" stroke-width="2.5" fill="none"><path d="M49 66H40V149H49 M132 66H141V149H132"/></g><text x="59" y="98" font-family="Georgia,serif" font-size="30" fill="#8f79bc">2  1</text><text x="59" y="137" font-family="Georgia,serif" font-size="30" fill="#8f79bc">1  3</text><path d="M20 170H161" stroke="#ece6f2" stroke-dasharray="4 4"/><text x="22" y="197" font-family="Arial,sans-serif" font-size="14" fill="#75a58c">det(A) = 5</text><path d="M145 188l5 5 10-11" fill="none" stroke="#75a58c" stroke-width="2" stroke-linecap="round"/></g>
+ <g transform="translate(938 188) rotate(8 82 70)" filter="url(#shadow)"><rect width="183" height="144" rx="17" fill="#ebe4fa" stroke="#dfd5f1"/><path d="M34 25l-10 10 10 10 M62 25l10 10-10 10 M52 23l-7 24" fill="none" stroke="#997bc8" stroke-width="2.4" stroke-linecap="round"/><text x="24" y="81" font-family="Arial,sans-serif" font-size="15" font-weight="700" fill="#6e558f">Bilim + amaliyot</text><rect x="24" y="105" width="42" height="5" rx="2.5" fill="#baa6da"/><rect x="73" y="105" width="59" height="5" rx="2.5" fill="#cbbce4"/><rect x="139" y="105" width="20" height="5" rx="2.5" fill="#baa6da"/></g>
+ <path d="M1060 69l5 12 12 5-12 5-5 12-5-12-12-5 12-5Z" fill="#aa97c6"/><circle cx="750" cy="334" r="8" fill="#bcd8c8"/>
+</svg>

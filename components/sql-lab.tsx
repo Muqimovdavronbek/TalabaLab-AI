@@ -1,0 +1,34 @@
+'use client';
+import {useEffect,useRef,useState} from 'react';
+import {Database,Play,RotateCcw,FileDown,Loader2,CheckCircle2,Info,Code2,Clock} from 'lucide-react';
+import {downloadText} from '@/lib/client';
+type SQLResult={columns:string[];rows:(string|number|null)[][];truncated:boolean;changes:number};
+const samples=[{name:'JOIN + o‘rtacha ball',sql:`SELECT t.ism, t.guruh,
+       ROUND(AVG(n.ball), 2) AS ortacha_ball
+FROM talabalar AS t
+LEFT JOIN natijalar AS n ON n.talaba_id = t.id
+GROUP BY t.id, t.ism, t.guruh
+ORDER BY ortacha_ball DESC;`},{name:'Fanlar kesimida',sql:`SELECT f.nom, COUNT(n.ball) AS baholangan,
+       ROUND(AVG(n.ball), 2) AS ortacha
+FROM fanlar f
+LEFT JOIN natijalar n ON f.id = n.fan_id
+GROUP BY f.id, f.nom
+ORDER BY f.nom;`},{name:'NULL qiymatlar',sql:`SELECT t.ism, f.nom, n.ball
+FROM natijalar n
+JOIN talabalar t ON t.id = n.talaba_id
+JOIN fanlar f ON f.id = n.fan_id
+WHERE n.ball IS NULL;`},{name:'O‘z jadvalingiz',sql:`CREATE TABLE loyihalar (
+  id INTEGER PRIMARY KEY,
+  nom TEXT NOT NULL,
+  holat TEXT DEFAULT 'yangi'
+);
+INSERT INTO loyihalar (nom) VALUES ('TalabaLab');
+SELECT * FROM loyihalar;`}];
+export function SQLLab(){const [sql,setSQL]=useState(samples[0].sql),[ready,setReady]=useState(false),[version,setVersion]=useState(''),[busy,setBusy]=useState(false),[results,setResults]=useState<SQLResult[]>([]),[error,setError]=useState(''),[elapsed,setElapsed]=useState<number|null>(null),[statements,setStatements]=useState(0);const worker=useRef<Worker|null>(null),timer=useRef<ReturnType<typeof setTimeout>|null>(null),generation=useRef(0);
+ function start(){worker.current?.terminate();setReady(false);const w=new Worker('/sql/runner.js');worker.current=w;const g=++generation.current;w.onmessage=e=>{if(g!==generation.current)return;const d=e.data;if(d.type==='ready'){setVersion(d.version);setReady(true);return;}if(timer.current)clearTimeout(timer.current);setBusy(false);if(d.type==='result'){setResults(d.results);setElapsed(d.elapsed);setStatements(d.statements);setError('');}else if(d.type==='error'){setError(d.message);setResults([]);setElapsed(null);}else if(d.type==='reset'){setResults([]);setError('');setElapsed(null);setReady(true);}};w.onerror=()=>{setError('SQL muhiti yuklanmadi. Sahifani yangilab qayta urinib ko‘ring.');setBusy(false);setReady(false);};}
+ useEffect(()=>{start();return()=>{worker.current?.terminate();if(timer.current)clearTimeout(timer.current);};},[]);
+ function run(){if(!ready||busy)return;setBusy(true);setError('');worker.current?.postMessage({id:crypto.randomUUID(),kind:'execute',sql});timer.current=setTimeout(()=>{worker.current?.terminate();setBusy(false);setError('8 soniyalik limit tugadi. Hisoblash to‘xtatildi va mashq bazasi boshlang‘ich holatga qaytarildi.');setResults([]);setElapsed(null);start();},8000);}
+ function reset(){if(timer.current)clearTimeout(timer.current);setBusy(false);start();setResults([]);setError('');setElapsed(null);}
+ function csv(result:SQLResult){const cell=(v:unknown)=>`"${String(v??'').replace(/"/g,'""')}"`;return '\uFEFF'+[result.columns,...result.rows].map(r=>r.map(cell).join(',')).join('\r\n');}
+ return <div className="page-enter"><div className="page-heading"><span className="eyebrow">MA’LUMOTLAR BAZASI</span><h1>SQL mashq maydoni</h1><p>Yozing, bajaring va haqiqiy natijani ko‘ring. O‘quv bazasi ilova bazasidan ajratilgan.</p></div><div className="sql-layout"><div className="panel sql-schema"><div className="panel-title"><Database size={18}/><h2>Mashq bazasi</h2></div><span className={`badge ${ready?'green':'neutral'}`}>{ready?`SQLite ${version}`:'Yuklanmoqda…'}</span>{[{name:'talabalar',cols:['id · INTEGER · PK','ism · TEXT','guruh · TEXT']},{name:'fanlar',cols:['id · INTEGER · PK','nom · TEXT']},{name:'natijalar',cols:['talaba_id · INTEGER · FK','fan_id · INTEGER · FK','ball · REAL / NULL']}].map(t=><div className="schema-table" key={t.name}><strong><Database size={13}/>{t.name}</strong>{t.cols.map(c=><code key={c}>{c}</code>)}</div>)}<p className="hint">Namunaviy o‘quv ma’lumotlari. O‘zgarishlar faqat shu brauzer seansida saqlanadi.</p><button className="btn ghost small wide" onClick={reset}><RotateCcw size={14}/> Bazani qayta boshlash</button></div><div className="sql-main"><div className="panel"><div className="panel-title"><Code2 size={18}/><h2>SQL muharriri</h2><span className="badge neutral">SQLite dialekti</span></div><div className="sample-row sql-samples">{samples.map(s=><button className="chip" key={s.name} onClick={()=>setSQL(s.sql)}>{s.name}</button>)}</div><textarea className="sql-editor" spellCheck={false} aria-label="SQL kodi" value={sql} onChange={e=>setSQL(e.target.value)} onKeyDown={e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();run();}}}/><div className="sql-toolbar"><span className="hint">Ctrl + Enter · 1000 satrgacha · 8 soniya</span><button className="btn ghost small" onClick={()=>downloadText(sql,'TalabaLab_mashq.sql','application/sql')}><FileDown size={15}/> .sql</button><button className="btn primary" onClick={run} disabled={!ready||busy}>{busy?<Loader2 size={16} className="spin"/>:<Play size={16}/>} {busy?'Bajarilmoqda…':'Bajarish'}</button></div></div><div className="panel sql-results"><div className="panel-title"><Database size={18}/><h2>Natija</h2>{elapsed!==null&&<span className="badge green"><CheckCircle2 size={12}/> Bajarib tekshirildi</span>}</div>{error?<div role="alert" className="error-box">{error}</div>:elapsed===null?<div className="empty compact"><Code2/><h3>So‘rovingiz natijasi shu yerda</h3><p>Namunani tanlang yoki o‘z SQL kodingizni yozing.</p></div>:<>{results.length?results.map((r,i)=><div key={i} className="sql-result-set">{r.columns.length?<><div className="row-between"><span className="hint">{r.rows.length} satr · {r.columns.length} ustun{r.truncated?' · natija qisqartirilgan':''}</span><button className="btn ghost small" onClick={()=>downloadText(csv(r),`TalabaLab_natija_${i+1}.csv`,'text/csv;charset=utf-8')}><FileDown size={14}/> CSV</button></div><div className="table-scroll"><table><thead><tr>{r.columns.map((c,j)=><th key={j}>{c}</th>)}</tr></thead><tbody>{r.rows.map((row,k)=><tr key={k}>{row.map((v,j)=><td key={j}>{v===null?<span className="null-value">NULL</span>:String(v)}</td>)}</tr>)}</tbody></table></div>{!r.rows.length&&<p className="hint">So‘rov bajarildi. Mos satr topilmadi.</p>}</>:<p className="hint">Amal bajarildi. O‘zgartirilgan satrlar: {r.changes}.</p>}</div>):<p className="hint">So‘rov muvaffaqiyatli bajarildi.</p>}<div className="execution-meta"><Clock size={13}/>{elapsed.toFixed(1)} ms · {statements} statement · SQLite</div></>}</div><div className="note"><Info size={16}/><p>MySQL yoki PostgreSQL uchun yozilgan kod bu yerda avtomatik boshqa dialektga aylantirilmaydi. Fayl va tashqi baza operatsiyalari o‘chirilgan.</p></div></div></div></div>;
+}
